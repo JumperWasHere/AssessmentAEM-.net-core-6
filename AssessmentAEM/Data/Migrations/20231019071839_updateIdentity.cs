@@ -5,13 +5,15 @@
 namespace AssessmentAEM.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class seedData : Migration
+    public partial class updateIdentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var sql = File.ReadAllText("./Sql/seedData.sql");
-            migrationBuilder.Sql(sql);
+            migrationBuilder.Sql("SET IDENTITY_INSERT [Platforms] OFF");
+            migrationBuilder.Sql("SET IDENTITY_INSERT [Wells] OFF");
+
+
         }
 
         /// <inheritdoc />

@@ -10,12 +10,16 @@ namespace AssessmentAEM.Data
     {
         private DateTime dateTime;
 
+        public PlatfromDbContext()
+        {
+        }
+
         public PlatfromDbContext(DbContextOptions<PlatfromDbContext> options) : base(options)
         {
 
         }
-        public DbSet<Platform> Platform { get; set; }
-        public DbSet<Well> Well { get; set; }
+        public DbSet<Platform> Platforms { get; set; }
+        public DbSet<Well> Wells { get; set; }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
 

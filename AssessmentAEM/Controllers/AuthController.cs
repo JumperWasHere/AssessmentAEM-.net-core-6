@@ -28,11 +28,11 @@ namespace AssessmentAEM.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Login(User user)
         {
-            //if (user.Username != request.Username)
-            //{
-
-            //    return BadRequest("user not exist");
-            //}
+       
+            if(validateUser(user) == false)
+            {
+                return BadRequest("Invalid credential");
+            }
             string token = CreateToken(user);
             return Ok(token);
 
@@ -53,6 +53,14 @@ namespace AssessmentAEM.Controllers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+        private bool validateUser(User user)
+        {
+            if(user.Username != "user@aemenersol.com") return false;
+            if(user.Password != "Test@123") return false;
+
+            return true;
+
         }
     }
 }

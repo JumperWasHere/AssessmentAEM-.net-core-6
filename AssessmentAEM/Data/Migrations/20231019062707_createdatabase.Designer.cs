@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssessmentAEM.Data.Migrations
 {
     [DbContext(typeof(PlatfromDbContext))]
-    [Migration("20231018140906_seedData")]
-    partial class seedData
+    [Migration("20231019062707_createdatabase")]
+    partial class createdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,77 +27,77 @@ namespace AssessmentAEM.Data.Migrations
 
             modelBuilder.Entity("AssessmentAEM.Models.Platform", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("createdAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("latitude")
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UniqueName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("longitude")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("uniqueName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("updatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("Platform");
+                    b.ToTable("Platforms");
                 });
 
             modelBuilder.Entity("AssessmentAEM.Models.Well", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("createdAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("latitude")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
 
-                    b.Property<string>("longitude")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
-                    b.Property<int>("platformId")
+                    b.Property<int>("PlatformId")
                         .HasColumnType("int");
 
-                    b.Property<string>("uniqueName")
+                    b.Property<string>("UniqueName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("updatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("platformId");
+                    b.HasIndex("PlatformId");
 
-                    b.ToTable("Well");
+                    b.ToTable("Wells");
                 });
 
             modelBuilder.Entity("AssessmentAEM.Models.Well", b =>
                 {
                     b.HasOne("AssessmentAEM.Models.Platform", null)
-                        .WithMany("Well")
-                        .HasForeignKey("platformId")
+                        .WithMany("Wells")
+                        .HasForeignKey("PlatformId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("AssessmentAEM.Models.Platform", b =>
                 {
-                    b.Navigation("Well");
+                    b.Navigation("Wells");
                 });
 #pragma warning restore 612, 618
         }
