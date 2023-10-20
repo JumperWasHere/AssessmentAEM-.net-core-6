@@ -2,4 +2,4 @@
 
 1. open Package manager Console
 2. Run "Update-Database" for migrate database
-    Noted make sure change Db Connection at appsettings.json
+3. Noted make sure change Db Connection at appsettings.json
