@@ -7,10 +7,21 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Drawing.Imaging;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddHttpClient();
 // Add services to the container.
+//builder.Services.AddHttpClient("MyHttpClient", client =>
+//{
+//    client.BaseAddress = new Uri("http://test-demo.aemenersol.com/api/PlatformWell/GetPlatformWellActual");
+//    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+//}).SetHandlerLifetime(TimeSpan.FromMinutes(5));
+
 
 //builder.Services.AddControllers();
 builder.Services.AddControllers()

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssessmentAEM.Data.Migrations
 {
     [DbContext(typeof(PlatfromDbContext))]
-    [Migration("20231019071839_updateIdentity")]
-    partial class updateIdentity
+    [Migration("20231020155911_createdatabase")]
+    partial class createdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,10 +28,7 @@ namespace AssessmentAEM.Data.Migrations
             modelBuilder.Entity("AssessmentAEM.Models.Platform", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -89,7 +86,7 @@ namespace AssessmentAEM.Data.Migrations
             modelBuilder.Entity("AssessmentAEM.Models.Well", b =>
                 {
                     b.HasOne("AssessmentAEM.Models.Platform", null)
-                        .WithMany("Wells")
+                        .WithMany("Well")
                         .HasForeignKey("PlatformId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -97,7 +94,7 @@ namespace AssessmentAEM.Data.Migrations
 
             modelBuilder.Entity("AssessmentAEM.Models.Platform", b =>
                 {
-                    b.Navigation("Wells");
+                    b.Navigation("Well");
                 });
 #pragma warning restore 612, 618
         }

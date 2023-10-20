@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace AssessmentAEM.Controllers
 {
@@ -16,20 +19,70 @@ namespace AssessmentAEM.Controllers
         public static User user = new User();
         private readonly PlatfromDbContext _context;
         private readonly IConfiguration configuration;
-
-        public AuthController(PlatfromDbContext context,IConfiguration configuration)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public AuthController(PlatfromDbContext context,IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             this.configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
-        [HttpPost("login")]
+
+        [HttpPost("login-api")]
+        public async Task<IActionResult> loginApi(User user)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var loginData = new
+            {
+                Username = user.Username,
+                Password = user.Password
+            };
+            var content = new StringContent(JsonSerializer.Serialize(loginData), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("http://test-demo.aemenersol.com/api/Account/Login", content);
+            //var responseContent = await response.Content.ReadAsStringAsync();
+            //Console.WriteLine("Response Content: " + responseContent);
+            //return Ok(responseContent);
+            if (response.IsSuccessStatusCode)
+            {
+                //var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(
+                //    await response.Content.ReadAsStringAsync(),
+                //    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                //);
+                var token =  await response.Content.ReadAsStringAsync();
+                // Save the token for subsequent requests
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                return Ok(token);
+            }
+            else
+            {
+                return Unauthorized("Invalid username or password");
+            }
+
+            //var apiResponse = await client.GetAsync("http://test-demo.aemenersol.com/api/PlatformWell/GetPlatformWellActual");
+            //if (apiResponse.IsSuccessStatusCode)
+            //{
+            //    using var contentStream =
+            //        await apiResponse.Content.ReadAsStreamAsync();
+
+            //    GitHubBranches = await JsonSerializer.DeserializeAsync
+            //        <IEnumerable<GitHubBranch>>(contentStream);
+            //    return Ok(contentStream);
+            //}
+            //return Ok(apiResponse.IsSuccessStatusCode);
+
+        }
+        
+
+
+            [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Login(User user)
         {
-       
-            if(validateUser(user) == false)
+            
+
+            if (validateUser(user) == false)
             {
                 return BadRequest("Invalid credential");
             }

@@ -25,10 +25,7 @@ namespace AssessmentAEM.Data.Migrations
             modelBuilder.Entity("AssessmentAEM.Models.Platform", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -86,7 +83,7 @@ namespace AssessmentAEM.Data.Migrations
             modelBuilder.Entity("AssessmentAEM.Models.Well", b =>
                 {
                     b.HasOne("AssessmentAEM.Models.Platform", null)
-                        .WithMany("Wells")
+                        .WithMany("Well")
                         .HasForeignKey("PlatformId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -94,7 +91,7 @@ namespace AssessmentAEM.Data.Migrations
 
             modelBuilder.Entity("AssessmentAEM.Models.Platform", b =>
                 {
-                    b.Navigation("Wells");
+                    b.Navigation("Well");
                 });
 #pragma warning restore 612, 618
         }

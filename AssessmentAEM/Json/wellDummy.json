@@ -1,48 +1,23 @@
 [
   {
-    "id": 1,
-    "uniqueName": "Platform1",
+    "id": 11,
     "latitude": 1.012,
     "longitude": 0.1231,
     "lastUpdate": "2010-01-12T01:10:24.123",
-    "Wells": [
-      {
-        "id": 1,
-        "platformId": 11,
-        "uniqueName": "Wells11",
-        "latitude": 37.06257,
-        "longitude": 18.406885,
-        "lastUpdate": "2018-08-04T02:16:42"
-      },
-      {
-        "id": 2,
-        "platformId": 11,
-        "uniqueName": "Wells12",
-        "latitude": 73.688254,
-        "longitude": 36.81377,
-        "lastUpdate": "2017-01-23T01:28:37"
-      },
-      {
-        "id": 3,
-        "platformId": 11,
-        "uniqueName": "Wells13",
-        "latitude": 109.88473,
-        "longitude": 55.220655,
-        "lastUpdate": "2018-02-26T18:39:43"
-      }
-    ]
+    "ggwp": "data"
+   
   },
   {
-    "id": 2,
+    "id": 12,
     "uniqueName": "Platform2",
     "latitude": 1.018,
     "longitude": 0.1284,
     "lastUpdate": "2010-01-15T01:14:57.543",
-    "Wells": [
+    "well": [
       {
         "id": 4,
         "platformId": 12,
-        "uniqueName": "Wells21",
+        "uniqueName": "Well21",
         "latitude": 145.6595,
         "longitude": 73.62754,
         "lastUpdate": "2018-04-16T12:53:20"
@@ -50,7 +25,7 @@
       {
         "id": 5,
         "platformId": 12,
-        "uniqueName": "Wells22",
+        "uniqueName": "Well22",
         "latitude": 181.01989,
         "longitude": 92.034426,
         "lastUpdate": "2018-08-20T14:59:48"
@@ -58,7 +33,7 @@
       {
         "id": 6,
         "platformId": 12,
-        "uniqueName": "Wells23",
+        "uniqueName": "Well23",
         "latitude": 215.973059,
         "longitude": 110.441311,
         "lastUpdate": "2018-07-24T21:07:21"
@@ -66,16 +41,16 @@
     ]
   },
   {
-    "id": 3,
+    "id": 13,
     "uniqueName": "Platform3",
     "latitude": 1.024,
     "longitude": 0.1337,
     "lastUpdate": "2010-01-12T01:10:24.123",
-    "Wells": [
+    "well": [
       {
         "id": 7,
         "platformId": 13,
-        "uniqueName": "Wells31",
+        "uniqueName": "Well31",
         "latitude": 254.904124,
         "longitude": 128.848196,
         "lastUpdate": "2015-08-17T19:52:47"
@@ -83,7 +58,7 @@
       {
         "id": 8,
         "platformId": 13,
-        "uniqueName": "Wells32",
+        "uniqueName": "Well32",
         "latitude": 289.631824,
         "longitude": 147.255081,
         "lastUpdate": "2016-10-20T12:20:45"
@@ -91,7 +66,7 @@
       {
         "id": 9,
         "platformId": 13,
-        "uniqueName": "Wells33",
+        "uniqueName": "Well33",
         "latitude": 323.959588,
         "longitude": 165.661966,
         "lastUpdate": "2015-09-17T13:29:04"
@@ -99,16 +74,16 @@
     ]
   },
   {
-    "id": 4,
+    "id": 14,
     "uniqueName": "Platform4",
     "latitude": 1.03,
     "longitude": 0.139,
     "lastUpdate": "2010-01-15T01:14:57.543",
-    "Wells": [
+    "well": [
       {
         "id": 10,
         "platformId": 14,
-        "uniqueName": "Wells41",
+        "uniqueName": "Well41",
         "latitude": 357.894286,
         "longitude": 184.068851,
         "lastUpdate": "2018-09-16T19:26:11"
@@ -116,7 +91,7 @@
       {
         "id": 11,
         "platformId": 14,
-        "uniqueName": "Wells42",
+        "uniqueName": "Well42",
         "latitude": 391.442631,
         "longitude": 202.475736,
         "lastUpdate": "2017-09-19T18:03:42"
@@ -124,7 +99,7 @@
       {
         "id": 12,
         "platformId": 14,
-        "uniqueName": "Wells43",
+        "uniqueName": "Well43",
         "latitude": 424.611183,
         "longitude": 220.882621,
         "lastUpdate": "2015-09-03T20:46:10"
@@ -132,16 +107,16 @@
     ]
   },
   {
-    "id": 5,
+    "id": 15,
     "uniqueName": "Platform5",
     "latitude": 1.036,
     "longitude": 0.1443,
     "lastUpdate": "2010-01-12T01:10:24.127",
-    "Wells": [
+    "well": [
       {
         "id": 13,
         "platformId": 15,
-        "uniqueName": "Wells51",
+        "uniqueName": "Well51",
         "latitude": 457.406356,
         "longitude": 239.289506,
         "lastUpdate": "2016-01-03T18:28:40"
@@ -149,7 +124,7 @@
       {
         "id": 14,
         "platformId": 15,
-        "uniqueName": "Wells52",
+        "uniqueName": "Well52",
         "latitude": 489.834418,
         "longitude": 257.696391,
         "lastUpdate": "2016-01-28T18:30:25"
@@ -157,7 +132,7 @@
       {
         "id": 15,
         "platformId": 15,
-        "uniqueName": "Wells53",
+        "uniqueName": "Well53",
         "latitude": 521.901501,
         "longitude": 276.103277,
         "lastUpdate": "2015-10-30T14:11:13"
@@ -165,43 +140,43 @@
     ]
   },
   {
-    "id": 6,
+    "id": 16,
     "uniqueName": "Platform6",
     "latitude": 1.042,
     "longitude": 0.1496,
     "lastUpdate": "2010-01-15T01:14:57.543",
-    "Wells": []
+    "well": []
   },
   {
-    "id": 7,
+    "id": 17,
     "uniqueName": "Platform7",
     "latitude": 1.048,
     "longitude": 0.1549,
     "lastUpdate": "2010-01-12T01:10:24.127",
-    "Wells": []
+    "well": []
   },
   {
-    "id": 8,
+    "id": 18,
     "uniqueName": "Platform8",
     "latitude": 1.054,
     "longitude": 0.1602,
     "lastUpdate": "2010-01-15T01:14:57.547",
-    "Wells": []
+    "well": []
   },
   {
-    "id": 9,
+    "id": 19,
     "uniqueName": "Platform9",
     "latitude": 1.06,
     "longitude": 0.1655,
     "lastUpdate": "2010-01-12T01:10:24.127",
-    "Wells": []
+    "well": []
   },
   {
-    "id": 10,
+    "id": 20,
     "uniqueName": "Platform10",
     "latitude": 1.066,
     "longitude": 0.1708,
     "lastUpdate": "2010-01-15T01:14:57.547",
-    "Wells": []
+    "well": []
   }
 ]

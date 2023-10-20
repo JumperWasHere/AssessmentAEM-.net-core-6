@@ -20,3 +20,7 @@ namespace AssessmentAEM.Models
         public virtual List<Well> Wells { get; set; }
     }
 }
+public class TokenResponse
+{
+    public string Token { get; set; }
+}

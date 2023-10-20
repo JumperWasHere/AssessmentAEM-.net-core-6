@@ -38,5 +38,13 @@ namespace AssessmentAEM.Data
         //        }
         //    );
         //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Platform>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever(); // ValueGeneratedNever means it's not an identity column
+
+            // Other entity configurations
+        }
     }
 }
