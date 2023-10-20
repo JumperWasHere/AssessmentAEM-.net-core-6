@@ -2,11 +2,11 @@
 {
     public class PlatformDummy
     {
-        public int id { get; set; }
-        public string uniqueName { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
-        public DateTime lastUpdate { get; set; }
-        public List<WellDummy> Well { get; set; }
+        public int Id { get; set; }
+        public string UniqueName { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public DateTime LastUpdate { get; set; }
+        public List<WellDummy> Wells { get; set; }
     }
 }

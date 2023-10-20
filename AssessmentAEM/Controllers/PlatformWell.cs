@@ -10,75 +10,21 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
+using System;
 
 namespace AssessmentAEM.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PlatformWell : ControllerBase
     {
         private readonly PlatfromDbContext _context;
-        //string json = File.ReadAllText("yourdata.json");
-        ////string json = File.ReadAllText("yourdata.json");
-        //List<MyDataModel> data = JsonSerializer.Deserialize<List<MyDataModel>>(json);
+  
         public PlatformWell(PlatfromDbContext context) => _context = context;
-        //[HttpPost("GetPlatformWellActual")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<ActionResult> GetPlatformWellActual(Platform platform)
-        //{
-        //    //string json = File.ReadAllText("./Json/weelactualRequest.json");
-        //    //List<MyDataModel> data = JsonSerializer.Deserialize<List<MyDataModel>>(json);
-
-        //    var existingPlatform = await _context.Platforms.FirstOrDefaultAsync(p => p.Id == platform.Id);
-           
-        //    if (existingPlatform == null)
-        //    {
-        //        // If the Platform doesn't exist, insert a new one
-        //        _context.Platforms.Add(data);
-        //    }
-        //    else
-        //    {
-        //        // If the Platform exists, update it
-        //        existingPlatform.uniqueName = data.uniqueName;
-        //        existingPlatform.latitude = data.latitude;
-        //        existingPlatform.longitude = data.longitude;
-        //        existingPlatform.createdAt = data.createdAt;
-        //        existingPlatform.updatedAt = data.updatedAt;
-        //    }
-        //    //var platforms = _context.Platforms.Include(p => p.Wells).ToList();
-        //    return Ok(platform);
-        //    //return await _context.Platform.ToListAsync();
-        //}
-        //  [HttpGet("GetPlatformWellDummy")]
-        //  public async Task<IEnumerable<PlatformDummy>> GetPlatformWellDummy()
-        //  {
-        //      //var platforms = _context.Platform.Include(p => p.Well).ToList();
-        //      var platforms = _context.Platform
-        //.Include(p => p.Well)
-        //.Select(p => new PlatformDummy
-        //{
-        //    id = p.id,
-        //    uniqueName = p.uniqueName,
-        //    latitude = p.latitude,
-        //    longitude = p.longitude,
-        //    lastUpdate = p.updatedAt,
-        //    Well = p.Well.Select(w => new WellDummy
-        //    {
-        //        id = w.id,
-        //        platformId = w.platformId,
-        //        uniqueName = w.uniqueName,
-        //        latitude = w.latitude,
-        //        longitude = w.longitude,
-        //        lastUpdate = w.updatedAt,
-        //        // Map properties of WellDummy here
-        //    }).ToList()
-        //    // Map other properties as needed
-        //})
-        //.ToList();
-        //      return platforms;
-
-        //  }
+      
         [HttpGet("GetPlatformWellActual")]
         public async Task<IActionResult> GetPlatformWellActual()
         {
@@ -147,6 +93,7 @@ namespace AssessmentAEM.Controllers
 
                 return Ok(await _context.Platforms.ToListAsync());
             }
+
             catch (Exception ex)
             {
                 // Log the exception for debugging purposes
@@ -156,11 +103,85 @@ namespace AssessmentAEM.Controllers
                 return BadRequest(ex);
             }
         }
+        [HttpGet("GetPlatformWellDummy")]
+        public async Task<IActionResult> GetPlatformWellDummy()
+        {
+            try
+            {
+                //string sqlScript = ReadSqlScriptFromFileOrResource();
+                   //_context.Database.ExecuteSqlRaw(sqlScript);
 
+                string jsonFilePath = "./Json/wellDummy.json";
+                string jsonString = System.IO.File.ReadAllText(jsonFilePath);
+                var options = new JsonSerializerOptions
+                {
+                    NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                    PropertyNameCaseInsensitive = true,
+                };
+                var jsonData = System.Text.Json.JsonSerializer.Deserialize<List<PlatformDummy>>(jsonString, options);
+                foreach (var data in jsonData)
+                {
+
+
+                    // Check if the Platform exists
+                    var existingPlatform = await _context.Platforms.FirstOrDefaultAsync(p => p.Id == data.Id);
+                    if (existingPlatform == null)
+                    {
+                            var platform = new Platform
+                        {
+                            UniqueName = data.UniqueName,
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            //CreatedAt = DateTime.Now, // You can set this as needed
+                            //UpdatedAt = DateTime.Now, // You can set this as needed
+                            Wells = data.Wells.Select(w => new Well
+                            {
+                                UniqueName = w.UniqueName,
+                                Latitude = w.Latitude,
+                                Longitude = w.Longitude,
+                                // Map properties from WellDummy to Well entity
+                            }).ToList()
+                        };
+
+                        _context.Platforms.Add(platform);
+
+                    }
+                    else
+                    {
+                        // If the Platform exists, update it
+                        existingPlatform.UniqueName = data.UniqueName;
+                        existingPlatform.Latitude = data.Latitude;
+                        existingPlatform.Longitude = data.Longitude;
+                        //existingPlatform.CreatedAt = data.CreatedAt;
+                        //existingPlatform.UpdatedAt = data.UpdatedAt;
+                        existingPlatform.Wells = data.Wells.Select(w => new Well
+                        {
+                            Id= w.Id,
+                            UniqueName = w.UniqueName,
+                            Latitude = w.Latitude,
+                            Longitude = w.Longitude,
+                            // Map properties from WellDummy to Well entity
+                        }).ToList();
+                    }
+
+                  
+                }
+                //// Save changes to the database
+                await _context.SaveChangesAsync();
+
+
+
+                return Ok(jsonData);
+            }
+
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex);
+            }
+        }
         private string ReadSqlScriptFromFileOrResource()
         {
-            //var sql = File.ReadAllText("./Sql/truncateTable.sql");
-            //migrationBuilder.Sql(sql);
             return System.IO.File.ReadAllText("./Sql/truncateTable.sql");
         }
     }
