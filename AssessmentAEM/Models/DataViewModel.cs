@@ -24,3 +24,7 @@ public class TokenResponse
 {
     public string Token { get; set; }
 }
+public class EndpointRequest
+{
+    public string Endpoint { get; set; }
+}
