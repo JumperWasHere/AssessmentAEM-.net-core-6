@@ -12,16 +12,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
+using AssessmentAEM.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHttpClient();
+//builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("MyApi", client => {
+    client.BaseAddress = new Uri("http://test-demo.aemenersol.com/");
+    // Additional configuration for the HttpClient
+});
 // Add services to the container.
-//builder.Services.AddHttpClient("MyHttpClient", client =>
-//{
-//    client.BaseAddress = new Uri("http://test-demo.aemenersol.com/api/PlatformWell/GetPlatformWellActual");
-//    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-//}).SetHandlerLifetime(TimeSpan.FromMinutes(5));
-
+builder.Services.AddTransient<AuthenticationService>();
 
 //builder.Services.AddControllers();
 builder.Services.AddControllers()
@@ -64,6 +64,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 

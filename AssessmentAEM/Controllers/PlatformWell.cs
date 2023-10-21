@@ -20,38 +20,58 @@ using System.Text;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using Azure;
+using AssessmentAEM.Services;
 
 namespace AssessmentAEM.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class PlatformWell : ControllerBase
     {
         private readonly PlatfromDbContext _context;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClient;
+        private readonly AuthenticationService _authenticationService;
 
-        //public PlatformWell(PlatfromDbContext context, IHttpClientFactory httpClientFactory) => {_context = context; };
-        public PlatformWell(PlatfromDbContext context, IHttpClientFactory httpClientFactory, HttpClient httpClient)
+        public PlatformWell(PlatfromDbContext context, IHttpClientFactory httpClientFactory, HttpClient httpClient, AuthenticationService authenticationService)
             {
                 _context = context;
                 _httpClientFactory = httpClientFactory;
             _httpClient = httpClient;
+            _authenticationService = authenticationService;
 
         }
 
-        [HttpGet("Async-getwell")]
+        [HttpGet("Async-Trucate-table-for-testing")]
         public async Task<IActionResult> getWell()
         {
+            string sqlScript = ReadSqlScriptFromFileOrResource();
+            _context.Database.ExecuteSqlRaw(sqlScript);
+            return Ok("Done truncate table");
             try
             {
-            var bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGFlbWVuZXJzb2wuY29tIiwianRpIjoiMjdjNTI5ZTQtNWI0Yi00NTFkLWJlODAtNzdiYWNkYzY5ZDk5IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIzMzE4ZTcxMC05MzAzLTQ4ZmQtODNjNS1mYmNhOTU0MTExZWYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzAwMzk5NTM2LCJpc3MiOiJodHRwOi8vdGVzdC1kZW1vLmFlbWVuZXJzb2wuY29tIiwiYXVkIjoiaHR0cDovL3Rlc3QtZGVtby5hZW1lbmVyc29sLmNvbSJ9.fIkB2XmAUXRebP9hgpJleLBecSN5h0inMw8UmmlDKvA";
+                
+                var token = await _authenticationService.GetAuthTokenAsync();
+
+               
+         
                 var client = _httpClientFactory.CreateClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
 
+               
+                //Console.WriteLine("token: "+token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
+                if (client.DefaultRequestHeaders.Authorization != null)
+                {
+                    // It's set as expected
+                    Console.WriteLine("Bearer token is set in the Authorization header: " + client.DefaultRequestHeaders.Authorization);
+                }
+                else
+                {
+                    // Authorization header is not set, there might be an issue
+                    Console.WriteLine("Bearer token is not set in the Authorization header.");
+                }
                 var httpResponseMessage = await client.GetAsync("http://test-demo.aemenersol.com/api/PlatformWell/GetPlatformWellActual");
-
+                Console.WriteLine("------------ actual");
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
 
@@ -62,8 +82,8 @@ namespace AssessmentAEM.Controllers
                         PropertyNameCaseInsensitive = true,
                     };
                     var jsonData = System.Text.Json.JsonSerializer.Deserialize<List<Platform>>(dataResult, options);
-                    string sqlScript = ReadSqlScriptFromFileOrResource();
-                    _context.Database.ExecuteSqlRaw(sqlScript);
+                    //string sqlScript = ReadSqlScriptFromFileOrResource();
+                    //_context.Database.ExecuteSqlRaw(sqlScript);
             
                     foreach (var data in jsonData)
                     {
@@ -141,26 +161,28 @@ namespace AssessmentAEM.Controllers
 
         }
 
-        [HttpGet("Async-getwellDummy")]
+       
+
+        [HttpGet("Async-Data")]
         public async Task<IActionResult> getWellDummy()
         {
             //1. check if need to filter datetime
-            //2. add login api at 2 well api
             //3.test another posibilty change data
             //4.repair filter createAt datetime,, it should do not change when update
             try
             {
-                var bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGFlbWVuZXJzb2wuY29tIiwianRpIjoiMjdjNTI5ZTQtNWI0Yi00NTFkLWJlODAtNzdiYWNkYzY5ZDk5IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIzMzE4ZTcxMC05MzAzLTQ4ZmQtODNjNS1mYmNhOTU0MTExZWYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzAwMzk5NTM2LCJpc3MiOiJodHRwOi8vdGVzdC1kZW1vLmFlbWVuZXJzb2wuY29tIiwiYXVkIjoiaHR0cDovL3Rlc3QtZGVtby5hZW1lbmVyc29sLmNvbSJ9.fIkB2XmAUXRebP9hgpJleLBecSN5h0inMw8UmmlDKvA";
-                var client = _httpClientFactory.CreateClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+                var token = await _authenticationService.GetAuthTokenAsync();
 
-                var httpResponseMessage = await client.GetAsync("http://test-demo.aemenersol.com/api/PlatformWell/GetPlatformWellDummy");
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
+
+                var httpResponseMessage = await client.GetAsync("http://test-demo.aemenersol.com/api/PlatformWell/GetPlatformWellActual");
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     string jsonFilePath = "./Json/wellDummy.json";
-                    string dataResult = System.IO.File.ReadAllText(jsonFilePath);
-                    //var dataResult = await httpResponseMessage.Content.ReadAsStringAsync();
+                    //string dataResult = System.IO.File.ReadAllText(jsonFilePath);
+                    var dataResult = await httpResponseMessage.Content.ReadAsStringAsync();
                     var options = new JsonSerializerOptions
                     {
                         NumberHandling = JsonNumberHandling.AllowReadingFromString,
@@ -168,10 +190,8 @@ namespace AssessmentAEM.Controllers
                         Converters = { new PlatformDummyConverter() },
                     };
                     var jsonData = System.Text.Json.JsonSerializer.Deserialize<List<PlatformDummy>>(dataResult, options);
-                    //return Ok(jsonData);
-                    string sqlScript = ReadSqlScriptFromFileOrResource();
-                    _context.Database.ExecuteSqlRaw(sqlScript);
-                    //List<Platform> myTestData = new List<Platform>();
+                    //string sqlScript = ReadSqlScriptFromFileOrResource();
+                    //_context.Database.ExecuteSqlRaw(sqlScript);
 
                     foreach (var data in jsonData)
                     {
@@ -184,20 +204,6 @@ namespace AssessmentAEM.Controllers
                             var platform = new Platform
                             {
                                 Id = data.Id,
-                                //UniqueName = data.UniqueName,
-                                //Latitude = data.Latitude,
-                                //Longitude = data.Longitude,
-                                //CreatedAt = data.CreatedAt, // You can set this as needed
-                                //UpdatedAt = data.UpdatedAt, // You can set this as needed
-                                //Well = data.Well.Select(w => new Well
-                                //{
-                                //    UniqueName = w.UniqueName,
-                                //    Latitude = w.Latitude,
-                                //    Longitude = w.Longitude,
-                                //    CreatedAt = w.CreatedAt, // You can set this as needed
-                                //    UpdatedAt = w.UpdatedAt,
-                                //    // Map properties from WellDummy to Well entity
-                                //}).ToList()
                             };
                             if (data.UniqueName != null)
                             {
@@ -240,12 +246,19 @@ namespace AssessmentAEM.Controllers
                             {
                                 existingPlatform.UniqueName = data.UniqueName;
                             }
-                            // If the Platform exists, update it
-                            
-                            existingPlatform.Latitude = data.Latitude;
-                            existingPlatform.Longitude = data.Longitude;
-                            //existingPlatform.CreatedAt = data.CreatedAt;
-                            //existingPlatform.UpdatedAt = data.UpdatedAt;
+                            if (data.Latitude != 0.0)
+                            {
+                                existingPlatform.Latitude = data.Latitude;
+                            }
+                            if (data.Longitude != 0.0)
+                            {
+                                existingPlatform.Longitude = data.Longitude;
+                            }
+                            if (data.UpdatedAt != new DateTime(0001, 1, 1))
+                            {
+                                existingPlatform.UpdatedAt = data.UpdatedAt;
+                            }
+
                             existingPlatform.Well = data.Well.Select(w => new Well
                             {
                                 Id = w.Id,
@@ -253,7 +266,7 @@ namespace AssessmentAEM.Controllers
                                 Latitude = w.Latitude,
                                 Longitude = w.Longitude,
                                 //CreatedAt = w.CreatedAt,
-                                //UpdatedAt = w.UpdatedAt,
+                                UpdatedAt = w.UpdatedAt,
                                 // Map properties from WellDummy to Well entity
                             }).ToList();
                         }
